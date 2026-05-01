@@ -24,25 +24,32 @@ export default async function handler(req) {
     const BASE = 'https://productores.invertironline.com';
 
     const URLS = [
-      `${BASE}/api/v1/Titulos/BCBA/GGAL/cotizacion`,
-      `${BASE}/api/v1/Titulos/BCBA/GD41/cotizacion`,
-      `${BASE}/api/v1/Titulos/BCBA/YPFD/cotizacion`,
-      `${BASE}/api/v1/Clientes/cotizaciones?mercado=BCBA&simbolos=GGAL,YPFD,GD41`,
-      `${BASE}/api/v1/Clientes/cotizaciones?mercado=BCBA&tickers=GGAL,YPFD,GD41`,
-      `${BASE}/api/v1/mercado/BCBA/panel?tipo=ACCIONES`,
-      `${BASE}/api/v1/Titulos/cotizaciones?mercado=BCBA&tipo=ACCIONES`,
-      `${BASE}/api/v1/Titulos/panel?mercado=BCBA`,
-      `${BASE}/api/v2/Titulos/BCBA/GGAL/cotizacion`,
-      `${BASE}/api/v1/Clientes/portafolio/670811/Argentina`,
+      // Ver error completo del 400
+      `${BASE}/api/v1/Clientes/cotizaciones`,
+      `${BASE}/api/v1/Clientes/cotizaciones?idCliente=670811`,
+      `${BASE}/api/v1/Clientes/670811/cotizaciones`,
+      `${BASE}/api/v1/Clientes/670811/cotizaciones?mercado=BCBA`,
+      // Descubrir rutas disponibles
+      `${BASE}/swagger/v1/swagger.json`,
+      `${BASE}/api/v1/swagger.json`,
+      `${BASE}/api/v1`,
+      `${BASE}/api/v1/Titulos`,
+      `${BASE}/api/v1/Titulos/BCBA`,
+      `${BASE}/api/v1/Titulos/GGAL`,
     ];
 
     const resultados = await Promise.all(URLS.map(async url => {
       try {
         const res = await fetch(url, { headers: h });
         const text = await res.text();
-        return { url: url.replace(BASE,''), status: res.status, preview: text.slice(0, 200) };
+        return {
+          url: url.replace(BASE, ''),
+          status: res.status,
+          // Mostrar respuesta completa para los 400
+          preview: text.slice(0, 500),
+        };
       } catch (e) {
-        return { url: url.replace(BASE,''), status: 'ERR', preview: e.message };
+        return { url: url.replace(BASE, ''), status: 'ERR', preview: e.message };
       }
     }));
 
