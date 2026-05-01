@@ -22,20 +22,21 @@ export default async function handler(req) {
     const token = await getToken();
     const h = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
     const BASE = 'https://productores.invertironline.com';
+    const ID = '670811';
 
     const URLS = [
-      // Ver error completo del 400
-      `${BASE}/api/v1/Clientes/cotizaciones`,
-      `${BASE}/api/v1/Clientes/cotizaciones?idCliente=670811`,
-      `${BASE}/api/v1/Clientes/670811/cotizaciones`,
-      `${BASE}/api/v1/Clientes/670811/cotizaciones?mercado=BCBA`,
-      // Descubrir rutas disponibles
-      `${BASE}/swagger/v1/swagger.json`,
-      `${BASE}/api/v1/swagger.json`,
-      `${BASE}/api/v1`,
-      `${BASE}/api/v1/Titulos`,
-      `${BASE}/api/v1/Titulos/BCBA`,
-      `${BASE}/api/v1/Titulos/GGAL`,
+      `${BASE}/api/v1/Clientes/${ID}`,
+      `${BASE}/api/v1/Clientes/${ID}/portafolio`,
+      `${BASE}/api/v1/Clientes/${ID}/cotizaciones`,
+      `${BASE}/api/v1/Clientes/${ID}/cotizaciones?mercado=BCBA`,
+      `${BASE}/api/v1/Clientes/portafolio/${ID}/Argentina`,
+      `${BASE}/api/v1/Cotizaciones/BCBA`,
+      `${BASE}/api/v1/Cotizaciones?mercado=BCBA&tipo=ACCIONES`,
+      `${BASE}/api/v1/Mercado/BCBA`,
+      `${BASE}/api/v1/Mercado/cotizaciones?tipo=ACCIONES`,
+      `${BASE}/api/v1/Instrumentos?mercado=BCBA&tipo=ACCIONES`,
+      `${BASE}/api/v1/Panel?mercado=BCBA&tipo=ACCIONES`,
+      `${BASE}/api/v1/Titulos/cotizacion?mercado=BCBA&simbolo=GGAL`,
     ];
 
     const resultados = await Promise.all(URLS.map(async url => {
@@ -45,8 +46,7 @@ export default async function handler(req) {
         return {
           url: url.replace(BASE, ''),
           status: res.status,
-          // Mostrar respuesta completa para los 400
-          preview: text.slice(0, 500),
+          preview: text.slice(0, 300),
         };
       } catch (e) {
         return { url: url.replace(BASE, ''), status: 'ERR', preview: e.message };
