@@ -1,6 +1,6 @@
 export const config = { runtime: 'edge' };
 
-const IOL_TOKEN_URL = 'https://api.invertironline.com/token';
+const IOL_TOKEN_URL = 'https://productores.invertironline.com/token';
 const IOL_API_URL   = 'https://api.invertironline.com/api/v2';
 
 const TIPOS = [
